@@ -35,12 +35,12 @@ module.exports = (sequelize, DataTypes) => {
 
     Books.hasMany(models.discounts, {
       onDelete: "cascade",
-      foreignKey: { field: "id", allowNull: false },
+      foreignKey: { field: "book_id", allowNull: false },
     });
 
     Books.hasMany(models.order_items, {
       onDelete: "restrict",
-      foreignKey: { field: "id", allowNull: false },
+      foreignKey: { field: "book_id", allowNull: false },
     });
   };
 

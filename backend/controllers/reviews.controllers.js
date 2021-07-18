@@ -14,6 +14,18 @@ const getReviewsByBookID = async (req, res) => {
   return res.status(200).json(reviewList);
 };
 
+const createReview = async (req, res) => {
+  const id = req.params.id;
+
+  const createdReview = await reviews.create({
+    ...req.body,
+    bookId: id,
+  });
+
+  return res.status(201).json(createdReview);
+};
+
 module.exports = {
   getReviewsByBookID,
+  createReview
 };
