@@ -52,10 +52,7 @@ function BookDetails(props) {
                     book_og_price: book.book_price,
                     book_price: book.discount_price,
                     book_cover_photo: book.book_cover_photo,
-                    author: {
-                        author_name: book.author_name,
-                        id: book.author_id
-                    },
+                    author: book.author,
                     id: book.id,
                 },
                 quantity
@@ -174,7 +171,7 @@ function BookDetails(props) {
                                         />
                                         <h6>
                                             <span>By (author) </span>
-                                            {book.author_name}
+                                            {book.author.author_name}
                                         </h6>
                                     </Col>
                                     <Col md={8}>

@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const expressAsyncHandler = require("express-async-handler");
-const { getAllBooks } = require("../controllers/books.controllers");
+const {
+  getAllBooks,
+  getRecommendedBooks,
+  getBookByID,
+} = require("../controllers/books.controllers");
 const {
   getReviewsByBookID,
   createReview,
@@ -11,6 +15,10 @@ const {
 } = require("../validations/reviews.validations");
 
 router.get("/", expressAsyncHandler(getAllBooks));
+
+router.get("/rec", expressAsyncHandler(getRecommendedBooks));
+
+router.get("/:id", expressAsyncHandler(getBookByID));
 
 router.get("/:id/reviews", expressAsyncHandler(getReviewsByBookID));
 

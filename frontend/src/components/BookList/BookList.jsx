@@ -11,7 +11,7 @@ function BookList(props) {
                     discount_price: bookItem.discount_price,
                     original_price: bookItem.book_price,
                     title: bookItem.book_title,
-                    author_name: bookItem.author_name,
+                    author_name: bookItem.author.author_name,
                     author_id: bookItem.author_id,
                     cover_photo: bookItem.book_cover_photo,
                     id: bookItem.id

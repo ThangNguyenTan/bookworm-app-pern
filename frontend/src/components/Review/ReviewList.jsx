@@ -138,7 +138,7 @@ function ReviewList({ bookID }) {
                                 setSearchedRating(i);
                             }}
                         >
-                            {i} star ({reviewsStatus[`numberof${i}starreviews`]}
+                            {i} star ({reviewsStatus[`numberOf${i}StarReviews`]}
                             )
                         </li>
                         <li className="divider">|</li>
@@ -155,7 +155,7 @@ function ReviewList({ bookID }) {
                                 setSearchedRating(i);
                             }}
                         >
-                            {i} star ({reviewsStatus[`numberof${i}starreviews`]}
+                            {i} star ({reviewsStatus[`numberOf${i}StarReviews`]}
                             )
                         </li>
                     </React.Fragment>
@@ -170,7 +170,7 @@ function ReviewList({ bookID }) {
                             setSearchedRating(i);
                         }}
                     >
-                        {i} star ({reviewsStatus[`numberof${i}starreviews`]})
+                        {i} star ({reviewsStatus[`numberOf${i}StarReviews`]})
                     </li>
                     <li className="divider">|</li>
                 </React.Fragment>

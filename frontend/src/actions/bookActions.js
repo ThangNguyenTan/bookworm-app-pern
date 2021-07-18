@@ -100,7 +100,7 @@ export const getBookDetails = (bookID) => {
             const { data } = await axios.get(`${BOOKS_URL}/${bookID}`);
             dispatch({
                 type: GET_BOOK_DETAILS_SUCCESS,
-                payload: data[0],
+                payload: data,
             });
         } catch (error) {
             dispatch({

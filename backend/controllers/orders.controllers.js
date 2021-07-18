@@ -1,4 +1,4 @@
-const { orders, order_items } = require("../models");
+const { orders, order_items, books, authors } = require("../models");
 const { validateOrderItems } = require("../validations/orders.validations");
 const Orders = orders;
 
@@ -35,15 +35,47 @@ const createOrder = async (req, res) => {
     await order_items.create({
       orderId: createdOrder.id,
       bookId: orderItem.bookId,
-      quantity: orderItem.quantity, 
-      price: orderItem.price
+      quantity: orderItem.quantity,
+      price: orderItem.price,
     });
   }
 
   return res.status(201).json(createdOrder);
 };
 
+const getOrderByID = async (req, res) => {
+  const id = req.params.id;
+
+  const orderList = await Orders.findOne({
+    where: {
+      id,
+    },
+    attributes: ["id", "order_date", "order_amount"],
+    include: [
+      {
+        model: order_items,
+        attributes: ["id", "quantity", "price"],
+        include: [
+          {
+            model: books,
+            attributes: ["id", "book_title", "book_cover_photo"],
+            include: [
+              {
+                model: authors,
+                attributes: ["id", "author_name"],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+
+  return res.status(200).json(orderList);
+};
+
 module.exports = {
   getAllOrders,
   createOrder,
+  getOrderByID
 };

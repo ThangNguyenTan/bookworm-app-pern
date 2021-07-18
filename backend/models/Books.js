@@ -42,6 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "restrict",
       foreignKey: { field: "book_id", allowNull: false },
     });
+
+    Books.hasMany(models.reviews, {
+      onDelete: "cascade",
+      foreignKey: { field: "book_id", allowNull: false },
+    });
   };
 
   return Books;

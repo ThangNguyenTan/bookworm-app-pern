@@ -77,7 +77,7 @@ export const placeOrder = ({ totalPrice }) => {
                 order_amount: parseFloat(totalPrice),
                 order_items: cart.map((cartItem) => {
                     return {
-                        bookID: cartItem.bookID,
+                        bookId: cartItem.bookID,
                         quantity: cartItem.quantity,
                         price: parseFloat(cartItem.book_price),
                     };
