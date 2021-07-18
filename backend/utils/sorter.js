@@ -28,6 +28,24 @@ const sortBooksQuery = (sortCriteria) => {
   return order;
 };
 
+const sortReviewsQuery = (sortCriteria) => {
+  let order = "";
+
+  switch (sortCriteria) {
+    case "dateasc":
+      order = sequelize.literal(`review_date ASC`);
+      break;
+    case "datedesc":
+      order = sequelize.literal(`review_date DESC`);
+      break;
+    default:
+      break;
+  }
+
+  return order;
+};
+
 module.exports = {
   sortBooksQuery,
+  sortReviewsQuery
 };
