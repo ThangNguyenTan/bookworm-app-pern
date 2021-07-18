@@ -1,0 +1,125 @@
+#book-details-page {
+    .book-details__card {
+        .card-img-top {
+            height: 320px;
+        }
+
+        .card-item {
+            h6 {
+                text-align: right;
+                margin-top: 20px;
+
+                span {
+                    color: grey;
+                }
+
+                @media screen and (min-width: 320px) and (max-width: 767px) {
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    .book-details__utils {
+    }
+
+    @media screen and (min-width: 320px) and (max-width: 1240px) {
+        .row > div {
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid grey;
+    background-color: #f7f7f7;
+
+    input {
+        background-color: #f7f7f7;
+        border: none;
+        outline: none;
+        text-align: center;
+    }
+
+    .decrement,
+    .increment {
+        font-size: 2rem;
+        font-weight: bold;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        cursor: pointer;
+
+        &:hover {
+            color: #fff;
+            background-color: #000;
+        }
+    }
+}
+
+.review-list {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 5px;
+
+    .review-list__header {
+        margin-bottom: 40px;
+    }
+
+    .review-list__ratings {
+        margin-bottom: 40px;
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+
+            li {
+                cursor: pointer;
+
+                &:first-child {
+                    margin-right: 30px;
+                }
+
+                &:hover,
+                &.active {
+                    text-decoration: underline;
+                }
+
+                &.active {
+                    font-weight: bold;
+                }
+            }
+
+            li.divider {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .review-list__result-header {
+        margin-bottom: 20px;
+    }
+}
+
+.review-item {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #000;
+
+    .review-item__header {
+        display: flex;
+        align-items: end;
+
+        p {
+            margin-top: 3px;
+            max-width: 60px;
+            width: 100%;
+        }
+    }
+}
