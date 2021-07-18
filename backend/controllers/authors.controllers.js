@@ -1,10 +1,9 @@
-const {authors, books} = require("../models");
+const {authors} = require("../models");
 const Authors = authors;
 
 const getAllAuthors = async (req, res) => {
   const authorList = await Authors.findAll({
     attributes: ["id", "author_name"],
-    include: [ books ],
     order: [
         ['id', 'ASC'],
     ],
