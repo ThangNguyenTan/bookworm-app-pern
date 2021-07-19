@@ -8,9 +8,7 @@ function createOrderValidation(req, res, next) {
     order_items: Joi.array()
       .items(
         Joi.object({
-          bookId: Joi.alternatives()
-            .try(Joi.number(), Joi.string())
-            .required(),
+          bookId: Joi.alternatives().try(Joi.number(), Joi.string()).required(),
           quantity: Joi.number().required(),
           price: Joi.number().required(),
         })
@@ -27,9 +25,9 @@ const validateOrderItems = async (orderItems) => {
 
   for (let i = 0; i < orderItems.length; i++) {
     const orderItem = orderItems[i];
-    const existedBook = await books.findByPk(orderItem.bookID);
+    const existedBook = await books.findByPk(orderItem.bookId);
     if (!existedBook) {
-      invalidBookID = orderItem.bookID;
+      invalidBookID = orderItem.bookId;
       break;
     }
   }

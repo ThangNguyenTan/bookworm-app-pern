@@ -3,10 +3,16 @@ const { avgRatingsBookQuery } = require("./queries");
 
 const filterBooksQuery = (searchObject) => {
   let obj = {
-    where: {}
+    where: {},
   };
 
   const { author, category, ratings } = searchObject;
+
+  if (ratings) {
+    obj.where.ratings = sequelize.literal(
+      `${avgRatingsBookQuery} >= ${ratings}`
+    );
+  }
 
   if (author) {
     obj.where.author_id = author;
@@ -16,13 +22,9 @@ const filterBooksQuery = (searchObject) => {
     obj.where.category_id = category;
   }
 
-  if (ratings) {
-    obj.where = sequelize.literal(`${avgRatingsBookQuery} >= ${ratings}`);
-}
-
-  return obj;
+  return obj.where;
 };
 
 module.exports = {
-    filterBooksQuery,
+  filterBooksQuery,
 };

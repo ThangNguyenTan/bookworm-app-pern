@@ -22,6 +22,9 @@ const sortBooksQuery = (sortCriteria) => {
       order = sequelize.literal(`${minDiscountPriceQueryCoalesce} DESC`);
       break;
     default:
+      order = sequelize.literal(
+        `(SELECT COUNT(reviews.id) FROM reviews WHERE reviews.book_id = books.id) DESC`
+      );
       break;
   }
 
@@ -47,5 +50,5 @@ const sortReviewsQuery = (sortCriteria) => {
 
 module.exports = {
   sortBooksQuery,
-  sortReviewsQuery
+  sortReviewsQuery,
 };

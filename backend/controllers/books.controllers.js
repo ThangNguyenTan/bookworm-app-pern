@@ -13,10 +13,16 @@ const getAllBooks = async (req, res) => {
   // Query: page, page-size, author, category, ratings, sort
   const currentPage = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query["page-size"]) || 15;
-  const author = req.query["author"];
-  const category = req.query["category"];
-  const ratings = req.query["ratings"];
-  const sortCriteria = req.query["sort"] || "popularity";
+  const sortCriteria = req.query.sort || "popularity";
+  const { author, category, ratings } = req.query;
+
+  // Generate where and order clause for filtering and sorting
+  const whereClause = filterBooksQuery({
+    author,
+    category,
+    ratings,
+  });
+  const orderClause = [sortBooksQuery(sortCriteria)];
 
   const bookList = await Books.findAndCountAll({
     attributes: {
@@ -28,14 +34,11 @@ const getAllBooks = async (req, res) => {
       ],
     },
     include: [{ model: authors, attributes: ["id", "author_name"] }],
-    ...filterBooksQuery({
-      author,
-      category,
-      ratings,
-    }),
-    order: [sortBooksQuery(sortCriteria)],
+    where: whereClause,
+    order: orderClause,
   });
 
+  // Create pagination object and slice the list respondingly
   const pageObject = paginate(bookList.count, currentPage, pageSize);
   const finalBookList = bookList.rows.slice(
     pageObject.startIndex,
@@ -45,13 +48,15 @@ const getAllBooks = async (req, res) => {
   return res.status(200).json({
     data: finalBookList,
     total: pageObject.totalItems,
-    current_page: pageObject.currentPage,
-    per_page: pageObject.pageSize,
+    currentPage: pageObject.currentPage,
+    perPage: pageObject.pageSize,
   });
 };
 
 const getRecommendedBooks = async (req, res) => {
-  const onSaleBooks = await Books.findAll({
+  // Create generic fetch object for all of the list
+  // Default value is for fetching highlyRatedBooks
+  let fetchObject = {
     attributes: {
       include: [
         [
@@ -61,39 +66,39 @@ const getRecommendedBooks = async (req, res) => {
       ],
     },
     include: [{ model: authors, attributes: ["id", "author_name"] }],
+    order: [
+      sequelize.literal(`${avgRatingsBookQuery} DESC`),
+      sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`),
+    ],
+    limit: 8,
+    offset: 0,
+  };
+
+  // Filter the books by on sale
+  // i.e. the difference between book price and discount price.
+  // The higher the difference the higher the rankings
+  const onSaleBooks = await Books.findAll({
+    ...fetchObject,
     order: [sortBooksQuery("onsale")],
     limit: 10,
-    offset: 0,
   });
 
+  // Filter the books by popularity
+  // i.e. number of reviews.
+  // The more the reviews the higher the rankings
   const popularBooks = await Books.findAll({
-    attributes: {
-      include: [
-        [
-          sequelize.literal(`${minDiscountPriceQueryCoalesce}`),
-          "discount_price",
-        ],
-      ],
-    },
-    include: [{ model: authors, attributes: ["id", "author_name"] }],
-    order: [sortBooksQuery("popularity")],
+    ...fetchObject,
+    order: [
+      sortBooksQuery("popularity"),
+      sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`),
+    ],
     limit: 8,
-    offset: 0,
   });
 
+  // Filter the books by average ratings
+  // The higher the ratings the higher the rankings
   const highlyRatedBooks = await Books.findAll({
-    attributes: {
-      include: [
-        [
-          sequelize.literal(`${minDiscountPriceQueryCoalesce}`),
-          "discount_price",
-        ],
-      ],
-    },
-    include: [{ model: authors, attributes: ["id", "author_name"] }],
-    order: [sequelize.literal(`${avgRatingsBookQuery} DESC`)],
-    limit: 8,
-    offset: 0,
+    ...fetchObject,
   });
 
   return res.status(200).json({

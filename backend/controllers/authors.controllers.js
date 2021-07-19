@@ -5,7 +5,7 @@ const getAllAuthors = async (req, res) => {
   const authorList = await Authors.findAll({
     attributes: ["id", "author_name"],
     order: [
-        ['id', 'ASC'],
+        ['author_name', 'ASC'],
     ],
   });
 

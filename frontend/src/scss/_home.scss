@@ -1,102 +1,102 @@
 #home-page {
-    #on-sale {
-        margin-bottom: 50px;
+  #on-sale {
+    margin-bottom: 50px;
 
-        .on-sale__header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+    .on-sale__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
 
-            p {
-                font-size: 1.4rem;
-                margin-top: 10px;
-            }
-        }
-
-        .on-sale__carousel {
-            padding: 50px 100px;
-            border: 0.5px solid #000;
-            border-radius: 10px;
-
-            @media screen and (min-width: 320px) and (max-width: 767px) {
-                padding: 50px;
-            }
-        }
+      p {
+        font-size: 1.4rem;
+        margin-top: 10px;
+      }
     }
 
-    #featured-books {
-        .featured-books__tab-container {
-            text-align: center;
-            margin-bottom: 20px;
+    .on-sale__carousel {
+      padding: 50px 100px;
+      border: 0.5px solid #000;
+      border-radius: 10px;
 
-            h4 {
-                margin-bottom: 20px;
-            }
-
-            .nav.nav-pills {
-                justify-content: center;
-            }
-        }
-
-        .featured-books__result-container {
-            padding: 50px 100px;
-            border: 0.5px solid #000;
-            border-radius: 10px;
-
-            @media screen and (min-width: 320px) and (max-width: 767px) {
-                padding: 50px 60px;
-                max-width: 100%;
-            }
-        }
+      @media screen and (min-width: 320px) and (max-width: 767px) {
+        padding: 50px;
+      }
     }
+  }
+
+  #featured-books {
+    .featured-books__tab-container {
+      text-align: center;
+      margin-bottom: 20px;
+
+      h4 {
+        margin-bottom: 20px;
+      }
+
+      .nav.nav-pills {
+        justify-content: center;
+      }
+    }
+
+    .featured-books__result-container {
+      padding: 50px 100px;
+      border: 0.5px solid #000;
+      border-radius: 10px;
+
+      @media screen and (min-width: 320px) and (max-width: 767px) {
+        padding: 50px 60px;
+        max-width: 100%;
+      }
+    }
+  }
 }
 
 .book-carousel {
-    .card-item {
-        margin-left: 10px;
-        margin-right: 10px;
+  .card-item {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .carousel-nav {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    cursor: pointer;
+
+    i {
+      font-size: 5rem;
+      cursor: pointer;
     }
 
-    .carousel-nav {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 9999;
-        cursor: pointer;
-
-        i {
-            font-size: 5rem;
-            cursor: pointer;
-        }
-
-        &.prev {
-            transform: translate(-1730%, -50%);
-        }
-
-        &.next {
-            transform: translate(1650%, -50%);
-        }
-
-        @media screen and (min-width: 768px) and (max-width: 1024px) {
-            &.prev {
-                transform: translate(-1030%, -50%);
-            }
-    
-            &.next {
-                transform: translate(950%, -50%);
-            }
-        }
-
-        @media screen and (min-width: 320px) and (max-width: 767px) {
-            &.prev {
-                transform: translate(-540%, -50%);
-            }
-    
-            &.next {
-                transform: translate(450%, -50%);
-            }
-        }
+    &.prev {
+      transform: translate(-1730%, -50%);
     }
+
+    &.next {
+      transform: translate(1650%, -50%);
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+      &.prev {
+        transform: translate(-1030%, -50%);
+      }
+
+      &.next {
+        transform: translate(950%, -50%);
+      }
+    }
+
+    @media screen and (min-width: 320px) and (max-width: 767px) {
+      &.prev {
+        transform: translate(-540%, -50%);
+      }
+
+      &.next {
+        transform: translate(450%, -50%);
+      }
+    }
+  }
 }

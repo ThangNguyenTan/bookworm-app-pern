@@ -5,6 +5,9 @@ const Orders = orders;
 const getAllOrders = async (req, res) => {
   const orderList = await Orders.findAll({
     attributes: ["id", "order_date", "order_amount"],
+    include: [
+      {model: order_items, attributes: ['id']}
+    ],
     order: [["id", "ASC"]],
   });
 
@@ -20,7 +23,7 @@ const createOrder = async (req, res) => {
   if (invalidBookID) {
     return res.status(400).json({
       message: `The product with an ID of ${invalidBookID} does not exist`,
-      invalid_book_id: invalidBookID,
+      invalidBookID,
     });
   }
 
@@ -45,36 +48,43 @@ const createOrder = async (req, res) => {
 const getOrderByID = async (req, res) => {
   const id = req.params.id;
 
-  const orderList = await Orders.findOne({
+  // These variables are for nested relationship fetching
+  // In order to get enough data for an order details to display
+  // Including: books, author, order items and order details.
+  const includeAuthor = [
+    {
+      model: authors,
+      attributes: ["id", "author_name"],
+    },
+  ];
+  const includeBook = [
+    {
+      model: books,
+      attributes: ["id", "book_title", "book_cover_photo"],
+      include: includeAuthor,
+    },
+  ];
+  const includeOrderItems = [
+    {
+      model: order_items,
+      attributes: ["id", "quantity", "price"],
+      include: includeBook,
+    },
+  ];
+
+  const order = await Orders.findOne({
     where: {
       id,
     },
     attributes: ["id", "order_date", "order_amount"],
-    include: [
-      {
-        model: order_items,
-        attributes: ["id", "quantity", "price"],
-        include: [
-          {
-            model: books,
-            attributes: ["id", "book_title", "book_cover_photo"],
-            include: [
-              {
-                model: authors,
-                attributes: ["id", "author_name"],
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    include: includeOrderItems,
   });
 
-  return res.status(200).json(orderList);
+  return res.status(200).json(order);
 };
 
 module.exports = {
   getAllOrders,
   createOrder,
-  getOrderByID
+  getOrderByID,
 };

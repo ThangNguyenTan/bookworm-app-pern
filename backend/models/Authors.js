@@ -1,14 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-  const Authors = sequelize.define("authors", {
-    author_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+  const Authors = sequelize.define(
+    "authors",
+    {
+      author_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      author_bio: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
-    author_bio: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-  }, { timestamps: false });
+    { timestamps: false }
+  );
 
   Authors.associate = (models) => {
     Authors.hasMany(models.books, {

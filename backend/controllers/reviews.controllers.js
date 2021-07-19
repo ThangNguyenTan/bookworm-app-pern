@@ -52,18 +52,21 @@ const getReviewsByBookID = async (req, res) => {
 
   const currentPage = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query["page-size"]) || 15;
-  const ratings = req.query["ratings"];
-  const sortCriteria = req.query["sort"] || "datedesc";
+  const ratings = req.query.ratings;
+  const sortCriteria = req.query.sort || "datedesc";
 
-  let ratingsWhere = ratings && ratings != "0" ? {
-    rating_start: ratings
-  } : {};
+  let ratingsWhere =
+    ratings && ratings != "0"
+      ? {
+          rating_start: ratings,
+        }
+      : {};
 
   const reviewList = await Reviews.findAndCountAll({
     include: [books],
     where: {
       book_id: id,
-      ...ratingsWhere
+      ...ratingsWhere,
     },
     order: [sortReviewsQuery(sortCriteria)],
   });
@@ -79,8 +82,8 @@ const getReviewsByBookID = async (req, res) => {
     reviews: {
       data: finalreviewList,
       total: pageObject.totalItems,
-      current_page: pageObject.currentPage,
-      per_page: pageObject.pageSize,
+      currentPage: pageObject.currentPage,
+      perPage: pageObject.pageSize,
     },
     reviewsStatus,
   });

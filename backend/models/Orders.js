@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       order_date: {
         type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
       order_amount: {
         type: DataTypes.DECIMAL(8, 2),
