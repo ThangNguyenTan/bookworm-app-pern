@@ -22,9 +22,7 @@ export const categoryListReducer = (
       return {
         ...state,
         loading: false,
-        categories: action.payload.sort((a, b) =>
-          a.category_name.localeCompare(b.category_name)
-        ),
+        categories: action.payload
       };
     case GET_ALL_CATEGORIES_FAIL:
       return {

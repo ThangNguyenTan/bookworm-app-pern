@@ -22,9 +22,7 @@ export const authorListReducer = (
       return {
         ...state,
         loading: false,
-        authors: action.payload.sort((a, b) =>
-          a.author_name.localeCompare(b.author_name)
-        ),
+        authors: action.payload
       };
     case GET_ALL_AUTHORS_FAIL:
       return {
