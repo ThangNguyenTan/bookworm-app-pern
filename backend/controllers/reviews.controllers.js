@@ -69,13 +69,12 @@ const getReviewsByBookID = async (req, res) => {
       ...ratingsWhere,
     },
     order: [sortReviewsQuery(sortCriteria)],
+    offset: (currentPage - 1) * pageSize,
+    limit: pageSize
   });
 
   const pageObject = paginate(reviewList.count, currentPage, pageSize);
-  const finalreviewList = reviewList.rows.slice(
-    pageObject.startIndex,
-    pageObject.endIndex
-  );
+  const finalreviewList = reviewList.rows;
   const reviewsStatus = await getReviewsStatus(id);
 
   return res.status(200).json({

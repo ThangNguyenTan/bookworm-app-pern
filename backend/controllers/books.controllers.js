@@ -36,14 +36,13 @@ const getAllBooks = async (req, res) => {
     include: [{ model: authors, attributes: ["id", "author_name"] }],
     where: whereClause,
     order: orderClause,
+    offset: (currentPage - 1) * pageSize,
+    limit: pageSize
   });
 
   // Create pagination object and slice the list respondingly
   const pageObject = paginate(bookList.count, currentPage, pageSize);
-  const finalBookList = bookList.rows.slice(
-    pageObject.startIndex,
-    pageObject.endIndex
-  );
+  const finalBookList = bookList.rows;
 
   return res.status(200).json({
     data: finalBookList,
