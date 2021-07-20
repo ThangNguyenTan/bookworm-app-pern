@@ -1,5 +1,6 @@
 const { orders, order_items, books, authors } = require("../models");
 const { validateOrderItems } = require("../validations/orders.validations");
+const { StatusCodes } = require("http-status-codes");
 const Orders = orders;
 
 const getAllOrders = async (req, res) => {
@@ -11,7 +12,7 @@ const getAllOrders = async (req, res) => {
     order: [["id", "ASC"]],
   });
 
-  return res.status(200).json(orderList);
+  return res.status(StatusCodes.OK).json(orderList);
 };
 
 const createOrder = async (req, res) => {
@@ -21,7 +22,7 @@ const createOrder = async (req, res) => {
   const invalidBookID = await validateOrderItems(orderItems);
 
   if (invalidBookID) {
-    return res.status(400).json({
+    return res.status(StatusCodes.BAD_REQUEST).json({
       message: `The product with an ID of ${invalidBookID} does not exist`,
       invalidBookID,
     });
@@ -42,7 +43,7 @@ const createOrder = async (req, res) => {
     });
   }
 
-  return res.status(201).json(createdOrder);
+  return res.status(StatusCodes.CREATED).json(createdOrder);
 };
 
 const getOrderByID = async (req, res) => {
@@ -80,7 +81,13 @@ const getOrderByID = async (req, res) => {
     include: includeOrderItems,
   });
 
-  return res.status(200).json(order);
+  if (!order) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      message: "There is no record with this ID"
+    });
+  }
+
+  return res.status(StatusCodes.OK).json(order);
 };
 
 module.exports = {

@@ -5,6 +5,7 @@ const {
   avgRatingsBookQuery,
 } = require("../utils/queries");
 const { sortReviewsQuery } = require("../utils/sorter");
+const { StatusCodes } = require("http-status-codes");
 const Reviews = reviews;
 const Books = books;
 
@@ -77,7 +78,7 @@ const getReviewsByBookID = async (req, res) => {
   const finalreviewList = reviewList.rows;
   const reviewsStatus = await getReviewsStatus(id);
 
-  return res.status(200).json({
+  return res.status(StatusCodes.OK).json({
     reviews: {
       data: finalreviewList,
       total: pageObject.totalItems,
@@ -96,7 +97,7 @@ const createReview = async (req, res) => {
     bookId: id,
   });
 
-  return res.status(201).json(createdReview);
+  return res.status(StatusCodes.CREATED).json(createdReview);
 };
 
 module.exports = {

@@ -2,6 +2,7 @@ const { books, authors } = require("../models");
 const { filterBooksQuery } = require("../utils/filterer");
 const { paginate } = require("../utils/pagination");
 const { sortBooksQuery } = require("../utils/sorter");
+const { StatusCodes } = require("http-status-codes");
 const sequelize = require("sequelize");
 const {
   minDiscountPriceQueryCoalesce,
@@ -44,7 +45,7 @@ const getAllBooks = async (req, res) => {
   const pageObject = paginate(bookList.count, currentPage, pageSize);
   const finalBookList = bookList.rows;
 
-  return res.status(200).json({
+  return res.status(StatusCodes.OK).json({
     data: finalBookList,
     total: pageObject.totalItems,
     currentPage: pageObject.currentPage,
@@ -100,7 +101,7 @@ const getRecommendedBooks = async (req, res) => {
     ...fetchObject,
   });
 
-  return res.status(200).json({
+  return res.status(StatusCodes.OK).json({
     onSaleBooks,
     highlyRatedBooks,
     popularBooks,
@@ -125,7 +126,13 @@ const getBookByID = async (req, res) => {
     include: [{ model: authors, attributes: ["id", "author_name"] }],
   });
 
-  return res.status(200).json(book);
+  if (!book) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      message: "There is no record with this ID"
+    });
+  }
+
+  return res.status(StatusCodes.OK).json(book);
 };
 
 module.exports = {

@@ -1,4 +1,5 @@
 const { categories } = require("../models");
+const { StatusCodes } = require("http-status-codes");
 const Categories = categories;
 
 const getAllCategories = async (req, res) => {
@@ -7,7 +8,7 @@ const getAllCategories = async (req, res) => {
     order: [["category_name", "ASC"]],
   });
 
-  return res.status(200).json(categoryList);
+  return res.status(StatusCodes.OK).json(categoryList);
 };
 
 module.exports = {
