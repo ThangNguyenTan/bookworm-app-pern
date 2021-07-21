@@ -42,6 +42,7 @@ const sortReviewsQuery = (sortCriteria) => {
       order = sequelize.literal(`review_date DESC`);
       break;
     default:
+      order = sequelize.literal(`review_date DESC`);
       break;
   }
 

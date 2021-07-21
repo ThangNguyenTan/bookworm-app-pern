@@ -13,7 +13,7 @@ import {
 } from "../constants";
 import { removeFromCart } from ".";
 
-const ORDERS_URL = `${process.env.REACT_APP_API_URL}/api/orders`;
+const ORDERS_URL = `${process.env.REACT_APP_API_URL}/orders`;
 //const ORDERS_URL = `/api/orders`;
 
 export const getAllOrders = () => {

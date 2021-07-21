@@ -5,8 +5,10 @@ const {
   getAllOrders,
   createOrder,
   getOrderByID,
-} = require("../controllers/orders.controllers");
-const { createOrderValidation } = require("../validations/orders.validations");
+} = require("../../../controllers/orders.controllers");
+const {
+  createOrderValidation,
+} = require("../../../validations/orders.validations");
 
 router.get("/", expressAsyncHandler(getAllOrders));
 

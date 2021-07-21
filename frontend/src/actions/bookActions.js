@@ -11,7 +11,7 @@ import {
   GET_RECOMMENDED_BOOKS_FAIL,
 } from "../constants";
 
-const BOOKS_URL = `${process.env.REACT_APP_API_URL}/api/books`;
+const BOOKS_URL = `${process.env.REACT_APP_API_URL}/books`;
 //const BOOKS_URL = `/api/books`;
 
 const createSearchBookURL = (searchQueryObj) => {

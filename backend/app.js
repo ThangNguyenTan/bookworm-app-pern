@@ -6,10 +6,7 @@ const { syncBD } = require("./config/syncDB");
 const cors = require("cors");
 
 const indexRouter = require("./routes/index");
-const authorsRouter = require("./routes/authors");
-const categoriesRouter = require("./routes/categories");
-const booksRouter = require("./routes/books");
-const ordersRouter = require("./routes/orders");
+const apiV1Router = require("./routes/api/v1/index");
 
 // Synchronize Sequelize DB Models
 syncBD();
@@ -27,10 +24,9 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/", indexRouter);
-app.use("/api/authors", authorsRouter);
-app.use("/api/categories", categoriesRouter);
-app.use("/api/books", booksRouter);
-app.use("/api/orders", ordersRouter);
+
+// API V1
+app.use("/api/v1", apiV1Router);
 
 // Error Handlers
 app.use((err, req, res, next) => {

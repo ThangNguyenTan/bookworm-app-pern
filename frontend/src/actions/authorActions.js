@@ -5,7 +5,7 @@ import {
   GET_ALL_AUTHORS_SUCCESS,
 } from "../constants";
 
-const AUTHORS_URL = `${process.env.REACT_APP_API_URL}/api/authors`;
+const AUTHORS_URL = `${process.env.REACT_APP_API_URL}/authors`;
 //const AUTHORS_URL = `/api/authors`;
 
 export const getAllAuthors = () => {

@@ -5,7 +5,7 @@ import {
   GET_ALL_CATEGORIES_SUCCESS,
 } from "../constants";
 
-const CATEGORIES_URL = `${process.env.REACT_APP_API_URL}/api/categories`;
+const CATEGORIES_URL = `${process.env.REACT_APP_API_URL}/categories`;
 //const CATEGORIES_URL = `/api/categories`;
 
 export const getAllCategories = () => {

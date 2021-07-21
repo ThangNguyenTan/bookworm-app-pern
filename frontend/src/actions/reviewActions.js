@@ -11,7 +11,7 @@ import {
 
 //const REVIEWS_URL = `/api/reviews`;
 
-const BOOKS_URL = `${process.env.REACT_APP_API_URL}/api/books`;
+const BOOKS_URL = `${process.env.REACT_APP_API_URL}/books`;
 //const BOOKS_URL = `/api/books`;
 
 const createSearchReviewURL = (bookID, searchQueryObj) => {

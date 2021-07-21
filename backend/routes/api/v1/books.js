@@ -5,14 +5,14 @@ const {
   getAllBooks,
   getRecommendedBooks,
   getBookByID,
-} = require("../controllers/books.controllers");
+} = require("../../../controllers/books.controllers");
 const {
   getReviewsByBookID,
   createReview,
-} = require("../controllers/reviews.controllers");
+} = require("../../../controllers/reviews.controllers");
 const {
   createReviewValidation,
-} = require("../validations/reviews.validations");
+} = require("../../../validations/reviews.validations");
 
 router.get("/", expressAsyncHandler(getAllBooks));
 

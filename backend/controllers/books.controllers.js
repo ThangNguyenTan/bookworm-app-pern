@@ -11,8 +11,8 @@ const {
 } = require("../business/books.business");
 const Books = books;
 
-const getAllBooks = async (req, res) => {
   // Query: page, page-size, author, category, ratings, sort
+const getAllBooks = async (req, res) => {
   const currentPage = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query["page-size"]) || 15;
   const sortCriteria = req.query.sort || "popularity";
