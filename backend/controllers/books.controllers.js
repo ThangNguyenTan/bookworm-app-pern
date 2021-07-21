@@ -1,13 +1,14 @@
-const { books, authors } = require("../models");
+const { books } = require("../models");
 const { filterBooksQuery } = require("../utils/filterer");
-const { paginate } = require("../utils/pagination");
 const { sortBooksQuery } = require("../utils/sorter");
 const { StatusCodes } = require("http-status-codes");
-const sequelize = require("sequelize");
+const createError = require("http-errors");
 const {
-  minDiscountPriceQueryCoalesce,
-  avgRatingsBookQuery,
-} = require("../utils/queries");
+  getOnSaleBooks,
+  getPopularBooks,
+  getHighlyRatedBooks,
+  mandatoryAttributesForBooks,
+} = require("../business/books.business");
 const Books = books;
 
 const getAllBooks = async (req, res) => {
@@ -25,81 +26,32 @@ const getAllBooks = async (req, res) => {
   });
   const orderClause = [sortBooksQuery(sortCriteria)];
 
+  // Fetch the book list based on the defined criteria
   const bookList = await Books.findAndCountAll({
-    attributes: {
-      include: [
-        [
-          sequelize.literal(`${minDiscountPriceQueryCoalesce}`),
-          "discount_price",
-        ],
-      ],
-    },
-    include: [{ model: authors, attributes: ["id", "author_name"] }],
+    ...mandatoryAttributesForBooks,
     where: whereClause,
     order: orderClause,
     offset: (currentPage - 1) * pageSize,
-    limit: pageSize
+    limit: pageSize,
   });
 
-  // Create pagination object and slice the list respondingly
-  const pageObject = paginate(bookList.count, currentPage, pageSize);
-  const finalBookList = bookList.rows;
-
   return res.status(StatusCodes.OK).json({
-    data: finalBookList,
-    total: pageObject.totalItems,
-    currentPage: pageObject.currentPage,
-    perPage: pageObject.pageSize,
+    data: bookList.rows,
+    total: bookList.count,
+    currentPage: currentPage,
+    perPage: pageSize,
   });
 };
 
 const getRecommendedBooks = async (req, res) => {
-  // Create generic fetch object for all of the list
-  // Default value is for fetching highlyRatedBooks
-  let fetchObject = {
-    attributes: {
-      include: [
-        [
-          sequelize.literal(`${minDiscountPriceQueryCoalesce}`),
-          "discount_price",
-        ],
-      ],
-    },
-    include: [{ model: authors, attributes: ["id", "author_name"] }],
-    order: [
-      sequelize.literal(`${avgRatingsBookQuery} DESC`),
-      sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`),
-    ],
-    limit: 8,
-    offset: 0,
-  };
+  // Get On Sale Books
+  const onSaleBooks = await getOnSaleBooks(10);
 
-  // Filter the books by on sale
-  // i.e. the difference between book price and discount price.
-  // The higher the difference the higher the rankings
-  const onSaleBooks = await Books.findAll({
-    ...fetchObject,
-    order: [sortBooksQuery("onsale")],
-    limit: 10,
-  });
+  // Get Popular Books
+  const popularBooks = await getPopularBooks(8);
 
-  // Filter the books by popularity
-  // i.e. number of reviews.
-  // The more the reviews the higher the rankings
-  const popularBooks = await Books.findAll({
-    ...fetchObject,
-    order: [
-      sortBooksQuery("popularity"),
-      sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`),
-    ],
-    limit: 8,
-  });
-
-  // Filter the books by average ratings
-  // The higher the ratings the higher the rankings
-  const highlyRatedBooks = await Books.findAll({
-    ...fetchObject,
-  });
+  // Get Highly Rated Books
+  const highlyRatedBooks = await getHighlyRatedBooks(8);
 
   return res.status(StatusCodes.OK).json({
     onSaleBooks,
@@ -108,28 +60,18 @@ const getRecommendedBooks = async (req, res) => {
   });
 };
 
-const getBookByID = async (req, res) => {
+const getBookByID = async (req, res, next) => {
   const id = req.params.id;
 
   const book = await Books.findOne({
     where: {
       id,
     },
-    attributes: {
-      include: [
-        [
-          sequelize.literal(`${minDiscountPriceQueryCoalesce}`),
-          "discount_price",
-        ],
-      ],
-    },
-    include: [{ model: authors, attributes: ["id", "author_name"] }],
+    ...mandatoryAttributesForBooks,
   });
 
   if (!book) {
-    return res.status(StatusCodes.NOT_FOUND).json({
-      message: "There is no record with this ID"
-    });
+    next(createError(StatusCodes.NOT_FOUND, "There is no record with this ID"));
   }
 
   return res.status(StatusCodes.OK).json(book);

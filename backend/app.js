@@ -11,17 +11,21 @@ const categoriesRouter = require("./routes/categories");
 const booksRouter = require("./routes/books");
 const ordersRouter = require("./routes/orders");
 
+// Synchronize Sequelize DB Models
 syncBD();
 
+// Init Express
 const app = express();
 
+// Middlewares
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
+// Routes
 app.use("/", indexRouter);
 app.use("/api/authors", authorsRouter);
 app.use("/api/categories", categoriesRouter);
@@ -30,7 +34,15 @@ app.use("/api/orders", ordersRouter);
 
 // Error Handlers
 app.use((err, req, res, next) => {
-  res.status(500).send({ message: err.message });
+  const statusCode = err.status || 500;
+
+  if (statusCode === 500) {
+    return res.status(statusCode).send({ message: "Internal Server Error" });
+  }
+
+  return res
+    .status(statusCode)
+    .send({ ...err });
 });
 
 module.exports = app;

@@ -1,52 +1,8 @@
 const { reviews, books } = require("../models");
-const { paginate } = require("../utils/pagination");
-const {
-  generateGetNumberOfReviewsQuery,
-  avgRatingsBookQuery,
-} = require("../utils/queries");
 const { sortReviewsQuery } = require("../utils/sorter");
 const { StatusCodes } = require("http-status-codes");
+const { getReviewsStatus } = require("../business/reviews.business");
 const Reviews = reviews;
-const Books = books;
-
-const getReviewsStatus = async (bookID) => {
-  // Create count query for each rating type from 1 to 5
-  const q1 = generateGetNumberOfReviewsQuery(1, bookID);
-  const q2 = generateGetNumberOfReviewsQuery(2, bookID);
-  const q3 = generateGetNumberOfReviewsQuery(3, bookID);
-  const q4 = generateGetNumberOfReviewsQuery(4, bookID);
-  const q5 = generateGetNumberOfReviewsQuery(5, bookID);
-
-  let reviewsStatus = await Books.findAll({
-    where: {
-      id: bookID,
-    },
-    attributes: [
-      [q1, "numberOf1StarReviews"],
-      [q2, "numberOf2StarReviews"],
-      [q3, "numberOf3StarReviews"],
-      [q4, "numberOf4StarReviews"],
-      [q5, "numberOf5StarReviews"],
-      [avgRatingsBookQuery, "ratings"],
-    ],
-  });
-
-  // If the reviewsStatus is empty
-  // We generate a default pattern for the client-site to behave normally
-  if (reviewsStatus.length === 0) {
-    reviewsStatus.push({
-      book_id: bookID,
-      numberOf1StarReviews: 0,
-      numberOf2StarReviews: 0,
-      numberOf3StarReviews: 0,
-      numberOf4StarReviews: 0,
-      numberOf5StarReviews: 0,
-      ratings: "0",
-    });
-  }
-
-  return reviewsStatus;
-};
 
 const getReviewsByBookID = async (req, res) => {
   const id = req.params.id;
@@ -71,19 +27,17 @@ const getReviewsByBookID = async (req, res) => {
     },
     order: [sortReviewsQuery(sortCriteria)],
     offset: (currentPage - 1) * pageSize,
-    limit: pageSize
+    limit: pageSize,
   });
 
-  const pageObject = paginate(reviewList.count, currentPage, pageSize);
-  const finalreviewList = reviewList.rows;
   const reviewsStatus = await getReviewsStatus(id);
 
   return res.status(StatusCodes.OK).json({
     reviews: {
-      data: finalreviewList,
-      total: pageObject.totalItems,
-      currentPage: pageObject.currentPage,
-      perPage: pageObject.pageSize,
+      data: reviewList.rows,
+      total: reviewList.count,
+      currentPage: currentPage,
+      perPage: pageSize,
     },
     reviewsStatus,
   });

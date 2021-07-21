@@ -1,31 +1,35 @@
 const { orders, order_items, books, authors } = require("../models");
 const { validateOrderItems } = require("../validations/orders.validations");
 const { StatusCodes } = require("http-status-codes");
+const createError = require("http-errors");
 const Orders = orders;
 
 const getAllOrders = async (req, res) => {
   const orderList = await Orders.findAll({
     attributes: ["id", "order_date", "order_amount"],
-    include: [
-      {model: order_items, attributes: ['id']}
-    ],
+    include: [{ model: order_items, attributes: ["id"] }],
     order: [["id", "ASC"]],
   });
 
   return res.status(StatusCodes.OK).json(orderList);
 };
 
-const createOrder = async (req, res) => {
+const createOrder = async (req, res, next) => {
   const { order_amount } = req.body;
   const orderItems = req.body.order_items;
 
   const invalidBookID = await validateOrderItems(orderItems);
 
   if (invalidBookID) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      message: `The product with an ID of ${invalidBookID} does not exist`,
-      invalidBookID,
-    });
+    return next(
+      createError(StatusCodes.BAD_REQUEST, `The product with an ID of ${invalidBookID} does not exist`, {
+        invalidBookID
+      })
+    );
+    // return res.status(StatusCodes.BAD_REQUEST).json({
+    //   message: `The product with an ID of ${invalidBookID} does not exist`,
+    //   invalidBookID,
+    // });
   }
 
   const createdOrder = await orders.create({
@@ -46,7 +50,7 @@ const createOrder = async (req, res) => {
   return res.status(StatusCodes.CREATED).json(createdOrder);
 };
 
-const getOrderByID = async (req, res) => {
+const getOrderByID = async (req, res, next) => {
   const id = req.params.id;
 
   // These variables are for nested relationship fetching
@@ -82,9 +86,9 @@ const getOrderByID = async (req, res) => {
   });
 
   if (!order) {
-    return res.status(StatusCodes.NOT_FOUND).json({
-      message: "There is no record with this ID"
-    });
+    return next(
+      createError(StatusCodes.NOT_FOUND, "There is no record with this ID")
+    );
   }
 
   return res.status(StatusCodes.OK).json(order);
