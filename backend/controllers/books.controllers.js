@@ -11,7 +11,7 @@ const {
 } = require("../business/books.business");
 const Books = books;
 
-  // Query: page, page-size, author, category, ratings, sort
+// Query: page, page-size, author, category, ratings, sort
 const getAllBooks = async (req, res) => {
   const currentPage = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query["page-size"]) || 15;
@@ -64,10 +64,10 @@ const getBookByID = async (req, res, next) => {
   const id = req.params.id;
 
   const book = await Books.findOne({
+    ...mandatoryAttributesForBooks,
     where: {
       id,
     },
-    ...mandatoryAttributesForBooks,
   });
 
   if (!book) {
