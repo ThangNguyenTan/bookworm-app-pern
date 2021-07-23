@@ -16,7 +16,7 @@ const {
 
 router.get("/", expressAsyncHandler(getAllBooks));
 
-router.get("/rec", expressAsyncHandler(getRecommendedBooks));
+router.get("/recommended", expressAsyncHandler(getRecommendedBooks));
 
 router.get("/:id", expressAsyncHandler(getBookByID));
 
