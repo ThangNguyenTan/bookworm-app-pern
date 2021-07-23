@@ -2,8 +2,7 @@ const {
   generateGetNumberOfReviewsQuery,
   avgRatingsBookQuery,
 } = require("../utils/queries");
-const { books } = require("../models");
-const Books = books;
+const { books: Books } = require("../models");
 
 // This function get all of the length of each reviews rating
 // and the average ratings of a specific book

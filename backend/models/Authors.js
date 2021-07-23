@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
     },
-    { timestamps: false }
+    { timestamps: false, tableName: "authors" }
   );
 
   Authors.associate = (models) => {

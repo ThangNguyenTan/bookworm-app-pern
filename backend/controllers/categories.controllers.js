@@ -1,6 +1,5 @@
-const { categories } = require("../models");
+const { categories: Categories } = require("../models");
 const { StatusCodes } = require("http-status-codes");
-const Categories = categories;
 
 const getAllCategories = async (req, res) => {
   const categoryList = await Categories.findAll({

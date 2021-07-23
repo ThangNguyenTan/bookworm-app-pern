@@ -1,5 +1,4 @@
-const { authors } = require("../models");
-const Authors = authors;
+const { authors: Authors } = require("../models");
 const { StatusCodes } = require("http-status-codes");
 
 const getAllAuthors = async (req, res) => {

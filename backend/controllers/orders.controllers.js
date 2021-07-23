@@ -1,13 +1,17 @@
-const { orders, order_items, books, authors } = require("../models");
+const {
+  orders: Orders,
+  order_items: OrderItems,
+  books: Books,
+  authors: Authors,
+} = require("../models");
 const { validateOrderItems } = require("../validations/orders.validations");
 const { StatusCodes } = require("http-status-codes");
 const createError = require("http-errors");
-const Orders = orders;
 
 const getAllOrders = async (req, res) => {
   const orderList = await Orders.findAll({
     attributes: ["id", "order_date", "order_amount"],
-    include: [{ model: order_items, attributes: ["id"] }],
+    include: [{ model: OrderItems, attributes: ["id"] }],
     order: [["id", "ASC"]],
   });
 
@@ -22,9 +26,13 @@ const createOrder = async (req, res, next) => {
 
   if (invalidBookID) {
     return next(
-      createError(StatusCodes.BAD_REQUEST, `The product with an ID of ${invalidBookID} does not exist`, {
-        invalidBookID
-      })
+      createError(
+        StatusCodes.BAD_REQUEST,
+        `The product with an ID of ${invalidBookID} does not exist`,
+        {
+          invalidBookID,
+        }
+      )
     );
     // return res.status(StatusCodes.BAD_REQUEST).json({
     //   message: `The product with an ID of ${invalidBookID} does not exist`,
@@ -32,14 +40,14 @@ const createOrder = async (req, res, next) => {
     // });
   }
 
-  const createdOrder = await orders.create({
+  const createdOrder = await Orders.create({
     order_amount,
   });
 
   for (let i = 0; i < orderItems.length; i++) {
     const orderItem = orderItems[i];
 
-    await order_items.create({
+    await OrderItems.create({
       orderId: createdOrder.id,
       bookId: orderItem.bookId,
       quantity: orderItem.quantity,
@@ -58,20 +66,20 @@ const getOrderByID = async (req, res, next) => {
   // Including: books, author, order items and order details.
   const includeAuthor = [
     {
-      model: authors,
+      model: Authors,
       attributes: ["id", "author_name"],
     },
   ];
   const includeBook = [
     {
-      model: books,
+      model: Books,
       attributes: ["id", "book_title", "book_cover_photo"],
       include: includeAuthor,
     },
   ];
   const includeOrderItems = [
     {
-      model: order_items,
+      model: OrderItems,
       attributes: ["id", "quantity", "price"],
       include: includeBook,
     },

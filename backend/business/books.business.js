@@ -3,9 +3,8 @@ const {
   minDiscountPriceQueryCoalesce,
   avgRatingsBookQuery,
 } = require("../utils/queries");
-const { authors, books } = require("../models");
+const { authors: Authors, books: Books } = require("../models");
 const { sortBooksQuery } = require("../utils/sorter");
-const Books = books;
 
 // These the definition of the the required fields of a book
 // for the front-end SPA to behave normally with out crashing
@@ -15,7 +14,7 @@ const mandatoryAttributesForBooks = {
       [sequelize.literal(`${minDiscountPriceQueryCoalesce}`), "discount_price"],
     ],
   },
-  include: [{ model: authors, attributes: ["id", "author_name"] }],
+  include: [{ model: Authors, attributes: ["id", "author_name"] }],
 };
 
 // Create generic fetch object for all of the list

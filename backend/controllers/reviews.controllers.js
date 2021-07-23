@@ -1,8 +1,7 @@
-const { reviews, books } = require("../models");
+const { reviews: Reviews, books: Books } = require("../models");
 const { sortReviewsQuery } = require("../utils/sorter");
 const { StatusCodes } = require("http-status-codes");
 const { getReviewsStatus } = require("../business/reviews.business");
-const Reviews = reviews;
 
 const getReviewsByBookID = async (req, res) => {
   const id = req.params.id;
@@ -20,7 +19,7 @@ const getReviewsByBookID = async (req, res) => {
       : {};
 
   const reviewList = await Reviews.findAndCountAll({
-    include: [books],
+    include: [Books],
     where: {
       book_id: id,
       ...ratingsWhere,
@@ -46,7 +45,7 @@ const getReviewsByBookID = async (req, res) => {
 const createReview = async (req, res) => {
   const id = req.params.id;
 
-  const createdReview = await reviews.create({
+  const createdReview = await Reviews.create({
     ...req.body,
     bookId: id,
   });

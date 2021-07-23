@@ -1,4 +1,4 @@
-const { books } = require("../models");
+const { books: Books } = require("../models");
 const { filterBooksQuery } = require("../utils/filterer");
 const { sortBooksQuery } = require("../utils/sorter");
 const { StatusCodes } = require("http-status-codes");
@@ -9,7 +9,6 @@ const {
   getHighlyRatedBooks,
   mandatoryAttributesForBooks,
 } = require("../business/books.business");
-const Books = books;
 
 // Query: page, page-size, author, category, ratings, sort
 const getAllBooks = async (req, res) => {

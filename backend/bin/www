@@ -82,10 +82,9 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-  console.log(`Server is now running on http://localhost:${port}/`)
+  // var addr = server.address();
+  // var bind = typeof addr === 'string'
+  //   ? 'pipe ' + addr
+  //   : 'port ' + addr.port;
+  debug(`Server is now running on http://localhost:${port}/`);
 }
