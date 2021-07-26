@@ -11,6 +11,8 @@ const getReviewsByBookID = async (req, res) => {
   const ratings = req.query.ratings;
   const sortCriteria = req.query.sort || "datedesc";
 
+  // Create an empty where object when ratings
+  // is not defined or equal to zero
   let ratingsWhere =
     ratings && ratings != "0"
       ? {

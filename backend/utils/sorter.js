@@ -2,28 +2,36 @@ const sequelize = require("sequelize");
 const { minDiscountPriceQueryCoalesce } = require("./queries");
 
 const sortBooksQuery = (sortCriteria) => {
-  let order = "";
+  let order = [];
 
   switch (sortCriteria) {
     case "popularity":
-      order = sequelize.literal(
-        `(SELECT COUNT(reviews.id) FROM reviews WHERE reviews.book_id = books.id) DESC`
+      order.push(
+        sequelize.literal(
+          `(SELECT COUNT(reviews.id) FROM reviews WHERE reviews.book_id = books.id) DESC`
+        ),
+        sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`)
       );
       break;
     case "onsale":
-      order = sequelize.literal(
-        `books.book_price - ${minDiscountPriceQueryCoalesce} DESC`
+      order.push(
+        sequelize.literal(
+          `books.book_price - ${minDiscountPriceQueryCoalesce} DESC`
+        ),
+        sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`)
       );
       break;
     case "priceasc":
-      order = sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`);
+      order.push(sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`));
       break;
     case "pricedesc":
-      order = sequelize.literal(`${minDiscountPriceQueryCoalesce} DESC`);
+      order.push(sequelize.literal(`${minDiscountPriceQueryCoalesce} DESC`));
       break;
     default:
-      order = sequelize.literal(
-        `(SELECT COUNT(reviews.id) FROM reviews WHERE reviews.book_id = books.id) DESC`
+      order.push(
+        sequelize.literal(
+          `(SELECT COUNT(reviews.id) FROM reviews WHERE reviews.book_id = books.id) DESC`
+        )
       );
       break;
   }

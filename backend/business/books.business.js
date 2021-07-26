@@ -23,7 +23,7 @@ const fetchObject = {
   ...mandatoryAttributesForBooks,
   order: [
     sequelize.literal(`${avgRatingsBookQuery} DESC`),
-    sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`),
+    ...sortBooksQuery("priceasc"),
   ],
   limit: 8,
   offset: 0,
@@ -35,7 +35,7 @@ const getOnSaleBooks = async (limit) => {
   // The higher the difference the higher the rankings
   const onSaleBooks = await Books.findAll({
     ...fetchObject,
-    order: [sortBooksQuery("onsale")],
+    order: [...sortBooksQuery("onsale")],
     limit,
   });
 
@@ -48,10 +48,7 @@ const getPopularBooks = async (limit) => {
   // The more the reviews the higher the rankings
   const popularBooks = await Books.findAll({
     ...fetchObject,
-    order: [
-      sortBooksQuery("popularity"),
-      sequelize.literal(`${minDiscountPriceQueryCoalesce} ASC`),
-    ],
+    order: [...sortBooksQuery("popularity")],
     limit,
   });
 

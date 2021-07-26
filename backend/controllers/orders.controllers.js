@@ -34,10 +34,6 @@ const createOrder = async (req, res, next) => {
         }
       )
     );
-    // return res.status(StatusCodes.BAD_REQUEST).json({
-    //   message: `The product with an ID of ${invalidBookID} does not exist`,
-    //   invalidBookID,
-    // });
   }
 
   const createdOrder = await Orders.create({

@@ -23,7 +23,7 @@ const getAllBooks = async (req, res) => {
     category,
     ratings,
   });
-  const orderClause = [sortBooksQuery(sortCriteria)];
+  const orderClause = [...sortBooksQuery(sortCriteria)];
 
   // Fetch the book list based on the defined criteria
   const bookList = await Books.findAndCountAll({
